@@ -56,80 +56,71 @@ create table PhanCong
 
 -- Tạo khóa ngoại
 
-ALTER TABLE NhanVien
-ADD CONSTRAINT NhanVien_PhongBan
-FOREIGN KEY (maPhong)
-REFERENCES PhongBan(maPhong);
+	alter table NhanVien
+	add constraint fk_NhanVien_PhongBan
+	foreign key (maPhong)
+	references PhongBan(maPhong);
+  
+  alter table NhanVien
+	add	constraint fk_NhanVien_ChiNhanh
+	foreign key (chiNhanh)
+	references ChiNhanh(maCN);
 
-ALTER TABLE NhanVien
-ADD CONSTRAINT NhanVien_ChiNhanh
-FOREIGN KEY (chiNhanh)
-REFERENCES ChiNhanh(maCN);
+	alter table PhongBan
+	add constraint fk_PhongBan_ChiNhanh
+	foreign key (chiNhanh)
+	references ChiNhanh(maCN);
+  
+  alter table PhongBan
+	add	constraint fk_PhongBan_NhanVien
+	foreign key (truongPhong)
+	references NhanVien(maNV);
 
-ALTER TABLE ChiNhanh
-ADD CONSTRAINT ChiNhanh_NhanVien
-FOREIGN KEY (truongChiNhanh)
-REFERENCES NhanVien(maNV);
+	alter table ChiNhanh
+	add constraint ChiNhanh_NhanVien
+	foreign key (truongChiNhanh)
+	references NhanVien(maNV);
 
-ALTER TABLE ChiTieu
-ADD CONSTRAINT ChiTieu_DuAn
-FOREIGN KEY (duAn)
-REFERENCES DuAn(maDA);
+	alter table DuAn
+	add constraint fk_DuAn_PhongBan
+	foreign key (phongChuTri)
+	references PhongBan(maPhong);
+  
+  alter table DuAn
+	add	constraint fk_DuAn_NhanVien
+	foreign key (truongDA)
+	references NhanVien(maNV);
 
-ALTER TABLE PhongBan
-ADD CONSTRAINT PhongBan_ChiNhanh
-FOREIGN KEY (chiNhanh)
-REFERENCES ChiNhanh(maCN);
+	alter table ChiTieu
+	add constraint fk_ChiTieu_DuAn
+	foreign key (duAn)
+	references DuAn(maDA);
 
-ALTER TABLE PhongBan
-ADD CONSTRAINT PhongBan_NhanVien
-FOREIGN KEY (truongPhong)
-REFERENCES NhanVien(maNV);
-
-ALTER TABLE PhanCong
-ADD CONSTRAINT PhanCong_DuAn
-FOREIGN KEY (duAn)
-REFERENCES DuAn(maDA);
-
-ALTER TABLE PhanCong
-ADD CONSTRAINT PhanCong_NhanVien
-FOREIGN KEY (maNV)
-REFERENCES NhanVien(maNV);
-
-ALTER TABLE DuAn
-ADD CONSTRAINT DuAn_NhanVien
-FOREIGN KEY (truongDA)
-REFERENCES NhanVien(maNV);
-
-ALTER TABLE DuAn
-ADD CONSTRAINT DuAn_PhongBan
-FOREIGN KEY (phongChuTri)
-REFERENCES PhongBan(maPhong);
-
--- Thêm dữ liệu
-
+	alter table PhanCong
+	add constraint fk_PhanCong_NhanVien
+	foreign key (maNV)
+	references NhanVien(maNV);
+  
+  alter table PhanCong
+	add	constraint fk_PhanCong_DuAn
+	foreign key (duAn)
+	references DuAn(maDA);
+  
+ 
 INSERT ALL 
-  INTO ChiNhanh VALUES ('CN001     ', 'TP Ho Chi Minh 1', 'TCN001    ')
-  INTO ChiNhanh VALUES ('CN002     ', 'Ha Noi', 'TCN002    ')
-  INTO ChiNhanh VALUES ('CN003     ', 'Da Nang', 'TCN003    ')
-  INTO ChiNhanh VALUES ('CN004     ', 'Hue', 'TCN004    ')
-  INTO ChiNhanh VALUES ('CN005     ', 'TP Ho Chi Minh 2', 'TCN005    ')
-SELECT * FROM dual;
-
-INSERT ALL 
-  INTO ChiTieu VALUES ('CT001     ', 'In an tai lieu', 1000, 'DA001     ')
-  INTO ChiTieu VALUES ('CT002     ', 'Goi dien cho khach hang', 500, 'DA002     ')
-  INTO ChiTieu VALUES ('CT003     ', 'Gap khach hang', 400, 'DA003     ')
-  INTO ChiTieu VALUES ('CT004     ', 'Thue mat bang', 500, 'DA004     ')
-  INTO ChiTieu VALUES ('CT005     ', 'Lien hoan', 500, 'DA005     ')
+  INTO ChiNhanh VALUES ('CN001     ', 'TP Ho Chi Minh 1', NULL)
+  INTO ChiNhanh VALUES ('CN002     ', 'Ha Noi', NULL)
+  INTO ChiNhanh VALUES ('CN003     ', 'Da Nang', NULL)
+  INTO ChiNhanh VALUES ('CN004     ', 'Hue', NULL)
+  INTO ChiNhanh VALUES ('CN005     ', 'TP Ho Chi Minh 2', NULL)
 SELECT * FROM dual;
 
 INSERT ALL
-INTO DuAn VALUES ('DA001     ', 'Ra soat thi truong', 10000, 'PKD       ', 'TDA001    ')
-INTO DuAn VALUES ('DA002     ', 'Tuyen nhan vien 2017', 1000, 'PNS       ', 'TDA002    ')
-INTO DuAn VALUES ('DA003     ', 'Ke hoach tang luong', 100000, 'PTCKT     ', 'TDA003    ')
-INTO DuAn VALUES ('DA004     ', 'Nghien cuu san pham moi', 2000, 'PKDCL     ', 'TDA004    ')
-INTO DuAn VALUES ('DA005     ', 'Kiem ke tai chinh', 1200, 'PTCKT     ', 'TDA005    ')
+INTO PhongBan VALUES ('PCSKH     ', 'Cham soc khach hang', NULL, to_date('03/09/2016','DD/MM/YYYY'), 2, 'CN004     ')
+INTO PhongBan VALUES ('PKD       ', 'Kinh doanh', NULL,  to_date('09/11/2015','DD/MM/YYYY'), 2, 'CN001     ')
+INTO PhongBan VALUES ('PKDCL     ', 'Kiem dinh chat luong', NULL,  to_date('02/08/2016','DD/MM/YYYY'), 2, 'CN005     ')
+INTO PhongBan VALUES ('PNS       ', 'Nhan su', NULL,  to_date('03/04/2014','DD/MM/YYYY'), 2, 'CN003     ')
+INTO PhongBan VALUES ('PTCKT     ', 'Tai chinh ke toan', NULL,  to_date('25/01/2017','DD/MM/YYYY'), 2, 'CN002     ')
 SELECT* FROM dual;
 
 INSERT ALL
@@ -166,6 +157,22 @@ INTO NhanVien VALUES ('TP005     ', 'Le Thi Hong', '77 Kha Van Can', '0123456789
 SELECT* FROM dual;
 
 INSERT ALL
+INTO DuAn VALUES ('DA001     ', 'Ra soat thi truong', 10000, 'PKD       ', 'TDA001    ')
+INTO DuAn VALUES ('DA002     ', 'Tuyen nhan vien 2017', 1000, 'PNS       ', 'TDA002    ')
+INTO DuAn VALUES ('DA003     ', 'Ke hoach tang luong', 100000, 'PTCKT     ', 'TDA003    ')
+INTO DuAn VALUES ('DA004     ', 'Nghien cuu san pham moi', 2000, 'PKDCL     ', 'TDA004    ')
+INTO DuAn VALUES ('DA005     ', 'Kiem ke tai chinh', 1200, 'PTCKT     ', 'TDA005    ')
+SELECT* FROM dual;
+
+INSERT ALL 
+  INTO ChiTieu VALUES ('CT001     ', 'In an tai lieu', 1000, 'DA001     ')
+  INTO ChiTieu VALUES ('CT002     ', 'Goi dien cho khach hang', 500, 'DA002     ')
+  INTO ChiTieu VALUES ('CT003     ', 'Gap khach hang', 400, 'DA003     ')
+  INTO ChiTieu VALUES ('CT004     ', 'Thue mat bang', 500, 'DA004     ')
+  INTO ChiTieu VALUES ('CT005     ', 'Lien hoan', 500, 'DA005     ')
+SELECT * FROM dual;
+
+INSERT ALL
 INTO PhanCong VALUES ('NV001     ', 'DA001     ', 'Thu thap bao cao', 100)
 INTO PhanCong VALUES ('NV003     ', 'DA002     ', 'Goi dien cho cac ung vien duoi 25 tuoi o TPHCM', 100)
 INTO PhanCong VALUES ('NV005     ', 'DA003     ', 'Phan tich so lieu viec lam cua nhan vien', 100)
@@ -178,11 +185,42 @@ INTO PhanCong VALUES ('TDA004    ', 'DA004     ', 'Dinh luong mau', 100)
 INTO PhanCong VALUES ('TDA005    ', 'DA005     ', 'Tham gia kiem toan', 200)
 SELECT* FROM dual;
 
-INSERT ALL
-INTO PhongBan VALUES ('PCSKH     ', 'Cham soc khach hang', 'TP004     ', to_date('03/09/2016','DD/MM/YYYY'), 2, 'CN004     ')
-INTO PhongBan VALUES ('PKD       ', 'Kinh doanh', 'TP001     ',  to_date('09/11/2015','DD/MM/YYYY'), 2, 'CN001     ')
-INTO PhongBan VALUES ('PKDCL     ', 'Kiem dinh chat luong', 'TP005     ',  to_date('02/08/2016','DD/MM/YYYY'), 2, 'CN005     ')
-INTO PhongBan VALUES ('PNS       ', 'Nhan su', 'TP003     ',  to_date('03/04/2014','DD/MM/YYYY'), 2, 'CN003     ')
-INTO PhongBan VALUES ('PTCKT     ', 'Tai chinh ke toan', 'TP002     ',  to_date('25/01/2017','DD/MM/YYYY'), 2, 'CN002     ')
-SELECT* FROM dual;
+update ChiNhanh 
+set truongChiNhanh = 'TCN001' 
+where maCN = 'CN001';
 
+update ChiNhanh 
+set truongChiNhanh = 'TCN002' 
+where maCN = 'CN002';
+
+update ChiNhanh 
+set truongChiNhanh = 'TCN003' 
+where maCN = 'CN003';
+
+update ChiNhanh 
+set truongChiNhanh = 'TCN004' 
+where maCN = 'CN004';
+
+update ChiNhanh 
+set truongChiNhanh = 'TCN005' 
+where maCN = 'CN005';
+
+update PhongBan 
+set truongPhong = 'TP001' 
+where maPhong = 'PKD';
+
+update PhongBan 
+set truongPhong = 'TP002' 
+where maPhong = 'PTCKT';
+
+update PhongBan 
+set truongPhong = 'TP003' 
+where maPhong = 'PNS';
+
+update PhongBan 
+set truongPhong = 'TP004' 
+where maPhong = 'PCSKH';
+
+update PhongBan 
+set truongPhong = 'TP005' 
+where maPhong = 'PKDCL';
