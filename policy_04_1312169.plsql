@@ -6,4 +6,5 @@ as (select DA.maDA, DA.tenDA, DA.kinhPhi, PB.tenPhong as TenPhongChuTri,
     where DA.phongChuTri = PB.maPhong and PB.chiNhanh = CN .maCN
     group by DA.maDA, DA.tenDA, DA.kinhPhi, PB.tenPhong, CN.tenCN,  NV.hoTen
     );
-grant select on duAn_giamDoc to giamDoc_role;
+    
+grant select on thongTinDuAn to giamDoc_role;
